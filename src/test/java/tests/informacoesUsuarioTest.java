@@ -1,6 +1,8 @@
 package tests;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,17 +12,21 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.time.Duration;
 
 public class informacoesUsuarioTest {
-    @Test
-    public void testAdicionarInformacaoDoUsuario(){
+    //Expor a propriedade navegador a todos os métodos da classe
+    private WebDriver navegador;
+    @BeforeEach
+    public void setUp(){
         // Abrindo o navegador
         System.setProperty("webdriver.chrome.driver","/home/estela/drivers/chromedriver");
-        WebDriver navegador = new ChromeDriver();
+        navegador = new ChromeDriver();
         navegador.manage().window().maximize();
         navegador.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         // navegar para a página
         navegador.get("http://www.juliodelima.com.br/taskit");
-
+    }
+    @Test
+    public void testAdicionarInformacaoDoUsuario(){
         //Clicar no link que possui o texto "sign in"
         navegador.findElement(By.linkText("Sign in")).click();
         //Identificando o formulário de login
@@ -35,7 +41,10 @@ public class informacoesUsuarioTest {
         WebElement me = navegador.findElement(By.className("me"));
         String textoNoElementoMe = me.getText();
         Assertions.assertEquals("Hi, Estela Magalhaes", textoNoElementoMe);
-        //Fechar o navegador
+    }
+    @AfterEach
+    public void tearDown(){
+        // Fechar o navegador
         navegador.quit();
     }
 }
